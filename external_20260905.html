@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<title>休食爆款笔记周榜 | 08.30 - 09.05</title>
+<style>
+:root {
+  --primary: #e07b39;
+  --primary-soft: #fff6ed;
+  --accent: #f0a868;
+  --bg: #ffffff;
+  --bg-soft: #fff9f3;
+  --text: #1e293b;
+  --text-soft: #64748b;
+  --border: #f2ddc8;
+  --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+body { line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 16px; }
+
+/* Header */
+.header {
+  text-align: center;
+  padding: 28px 16px 18px;
+  background: linear-gradient(135deg, #fdeadb 0%, #fff8f2 100%);
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+.header h1 {
+  font-size: 28px;
+  color: var(--primary);
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+}
+.header .subtitle { color: var(--text-soft); font-size: 13px; }
+.header .meta-banner {
+  display: inline-block;
+  background: #fff6ed;
+  border: 1px solid #f5cfae;
+  color: #c25f22;
+  padding: 6px 14px;
+  margin-top: 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+/* Hot Section */
+.hot-section {
+  background: linear-gradient(135deg, #fff6ed 0%, #fffaf5 100%);
+  border: 1px solid #f5cfae;
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 20px;
+}
+.hot-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #c25f22;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.hot-subtitle {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+.hot-row { display: flex; gap: 16px; flex-wrap: wrap; }
+.hot-col { flex: 1 1 280px; min-width: 0; }
+.hot-col h3 {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+/* 热点词云 */
+.kw-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+.kw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #fff;
+  border: 1px solid #f5cfae;
+  color: #555;
+  cursor: default;
+}
+.kw-chip.up { border-color: #e07b39; color: #e07b39; font-weight: 500; }
+.kw-chip.up-strong { background: #e07b39; color: #fff; border-color: #e07b39; font-weight: 600; }
+.kw-chip .arrow { font-size: 10px; }
+
+/* 热点笔记榜（横向滚动 + 大卡 + 完整标题） */
+.hot-notes-row { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+.hot-notes-row::-webkit-scrollbar { height: 6px; }
+.hot-notes-row::-webkit-scrollbar-track { background: #fbdcc4; border-radius: 3px; }
+.hot-notes-row::-webkit-scrollbar-thumb { background: #e07b39; border-radius: 3px; }
+.hot-note-card {
+  flex: 0 0 150px;
+  scroll-snap-align: start;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  transition: transform .15s;
+  display: flex;
+  flex-direction: column;
+}
+.hot-note-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255,107,53,.15); }
+.hot-note-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #f5f5f5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E") center/30px no-repeat;
+  object-fit: cover;
+  display: block;
+}
+.hot-note-title {
+  font-size: 12px;
+  padding: 8px 10px 10px;
+  line-height: 1.5;
+  color: #333;
+  word-break: break-all;
+  flex: 1;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px 0 12px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--text-soft);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .15s;
+}
+.tab-btn:hover { background: #f0f0f0; }
+.tab-btn.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Note Grid */
+.note-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .note-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+}
+
+/* 加载更多按钮 */
+.load-more-wrap { text-align: center; padding: 24px 16px 8px; }
+.load-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 28px;
+  background: #fff;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+.load-more-btn:hover { background: var(--primary); color: #fff; }
+.load-more-btn:disabled { opacity: .4; cursor: not-allowed; background: #f5f5f5; border-color: #ddd; color: #999; }
+.load-more-hint { color: var(--text-soft); font-size: 12px; margin-top: 8px; }
+.note-card {
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform .15s, box-shadow .15s;
+}
+.note-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,.08);
+}
+.note-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #f5f5f5 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='none' stroke='%23ccc' stroke-width='1.5'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3Ccircle cx='8.5' cy='8.5' r='1.5'/%3E%3Cpath d='M21 15l-5-5L5 21'/%3E%3C/svg%3E") center/40px no-repeat;
+  object-fit: cover;
+  display: block;
+  position: relative;
+}
+.note-type-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  background: rgba(0,0,0,.55);
+  color: #fff;
+  backdrop-filter: blur(6px);
+}
+.note-body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.note-title {
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.note-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-soft);
+  flex-wrap: wrap;
+}
+.note-meta .author { color: var(--primary); font-weight: 500; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-meta .cat-tag {
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+.note-link {
+  margin-top: auto;
+  font-size: 11px;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Empty */
+.empty {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--text-soft);
+  font-size: 13px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 24px 16px;
+  color: #aaa;
+  font-size: 11px;
+  margin-top: 24px;
+}
+
+.summary-cards { display:flex; flex-direction:column; gap:10px; margin:0 0 18px; }
+.summary-card { display:flex; gap:10px; background:#fff; border:1px solid #f5cfae;
+  border-left:4px solid #e07b39; border-radius:8px; padding:12px 14px; }
+.summary-icon { font-size:22px; line-height:1.2; }
+.summary-title { font-weight:700; font-size:14px; color:#c25f22; margin-bottom:4px; }
+.summary-desc { font-size:12.5px; line-height:1.75; color:#555; }
+.tabbar { position:sticky; top:0; z-index:50; display:flex; gap:8px; flex-wrap:wrap;
+  background:rgba(255,250,245,.96); backdrop-filter:blur(8px);
+  padding:10px 2px; margin:4px 0 6px; border-bottom:1px solid #f5cfae; }
+.tab-btn { border:1px solid #f5cfae; background:#fff; color:#b3600f; cursor:pointer;
+  font-size:13px; font-weight:600; padding:7px 16px; border-radius:999px;
+  font-family:inherit; transition:all .15s; }
+.tab-btn:hover { background:#fff6ed; }
+.tab-btn.on { background:#e07b39; color:#fff; border-color:#e07b39; }
+.cat-section { margin:26px 0 0; }
+.cat-section.hide { display:none; }
+.cat-head { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  border-bottom:2px solid #f5cfae; padding-bottom:8px; margin-bottom:6px; }
+.cat-head h2 { margin:0; font-size:17px; color:#c25f22; }
+.cat-sub { font-size:11.5px; color:#a98; }
+.cat-tags { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0 12px; }
+.cat-tag-chip { background:#fdeadb; color:#b3600f; font-size:11px; padding:3px 9px;
+  border-radius:999px; border:1px solid #f5cfae; }
+.cat-insight { background:#fff8e6; border-left:4px solid #f0b429; border-radius:6px;
+  padding:10px 12px; margin:0 0 14px; font-size:12px; line-height:1.75; color:#6b5514; }
+.card-rank { position:absolute; left:6px; top:6px; width:22px; height:22px; border-radius:50%;
+  background:rgba(0,0,0,.55); color:#fff; font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; }
+.rank-gold { background:#E6A817; } .rank-silver { background:#9AA3AC; } .rank-bronze { background:#C1803F; }
+.card-shop { font-size:11px; color:#e07b39; margin-top:2px; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; }
+.card-factors { display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:6px; }
+.factor-pill { background:#f6f1ea; color:#7a6a55; font-size:10px; padding:2px 7px; border-radius:4px; }
+.carrier-badge { font-size:10px; padding:2px 7px; border-radius:4px; background:#eef5ee;
+  color:#2E7D32; margin-left:auto; }
+.cover-fallback { width:100%; aspect-ratio:3/4; display:flex; align-items:center;
+  justify-content:center; background:linear-gradient(135deg,#fdeadb,#f5cfae);
+  color:#b3763c; font-size:11px; }
+.note-stat { font-size:10px; color:#bbb; margin-top:3px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>休食爆款笔记周榜 · 08.30 - 09.05</h1>
+    <div class="subtitle">休闲零食 × 粮油调味 · 本周新发商品笔记 · 小红书休食行业趋势</div>
+    <div class="meta-banner">📅 笔记发布于 8.30–9.5 · 各类目 TOP60 · 点击卡片看笔记原文</div>
+  </header>
+
+  <h2 style="font-size:16px;color:#c25f22;margin:6px 0 10px;">📊 本周洞察总结</h2>
+  <div class="summary-cards">
+    <div class="summary-card"><div class="summary-icon">🍿</div><div class="summary-body"><div class="summary-title">零食 · 中秋礼盒与巧克力双线冲榜</div><div class="summary-desc">月饼、曲奇礼盒、碱水球等中秋伴手礼集中上榜，礼盒季明显提速；巧克力这边靠尝鲜装、小包装做低门槛试吃切入，健达、金帝等品牌与新锐手作烘焙同台。做月饼/伴手礼和节令礼盒的商家现在跟进还来得及。</div></div></div><div class="summary-card"><div class="summary-icon">🥫</div><div class="summary-body"><div class="summary-title">粮油调味 · 产地叙事和减脂场景是主要抓手</div><div class="summary-desc">上榜的调味品几乎都在讲「自家做的」——野苏子酱、辣椒油、鸡枞菌油这类产地 + 家人手作的叙事最密集；另一条线是减脂人群的蘸水/低卡调味，把调味品挂到「水煮菜怎么吃得下去」的场景里。烘焙原料和食用油盘子小但竞争也少，适合小众切入。</div></div></div>
+  </div>
+
+  <div class="tabbar" id="tabbar"></div>
+
+  <div id="sections"></div>
+
+  <footer class="footer">
+    休食行业周度笔记榜 · 统计口径：笔记发布时间落在 08.30–09.05 的商家商品笔记，按当周带货表现排序<br>
+    🍊 榜单用于内容选题参考，封面/标题/打法角度均可借鉴；排名反映相对表现，不代表绝对体量
+  </footer>
+</div>
+
+<script>
+const GROUPS = [{"key": "snack", "icon": "🍿", "name": "休闲零食", "desc": "零食/坚果/特产"}, {"key": "sauce", "icon": "🥫", "name": "粮油调味", "desc": "调味/果酱·烘焙原料·食用油"}];
+const DATA = {"snack": [{"note_id": "6a994e59000000001203d651", "title": "自己盯着做的菠萝干今天上架", "note_type": "1", "author": "想退休的W", "shop": "己食地的店", "cat": "休闲零食", "third": "蜜饯/枣类/梅/果干/冻干", "fid": "1040g2sg324l9r7gf0s005o5id8e0bvm0nlggj68", "date": "2026-09-03", "plays": ["新品/节令", "工艺叙事"], "carrier": "✍️ 图文", "rank": 1}, {"note_id": "6a980f7d000000002901007e", "title": "汇报一下：月饼彻底爆单！9月19号下架！", "note_type": "1", "author": "新疆尼勒克黑蜂蜂蜜", "shop": "新疆尼勒克黑蜂蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "note_pre_post_uhdr/1040g3r8324k5rm8m0m705nikfbu087h7e45423g", "date": "2026-09-02", "plays": ["新品/节令", "品类爆款"], "carrier": "✍️ 图文", "rank": 2}, {"note_id": "6a955c9a0000000020033d44", "title": "闺蜜安排一包脆脆球没问题的对吧！", "note_type": "1", "author": "不吃大饼", "shop": "GS25便利店的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_pre_post/1040g3k0324h3ajip7a205plk7oq7cd7breoau38", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 3}, {"note_id": "6a9425840000000020039686", "title": "一晚上卖了1.2w颗月饼！我赌对了！", "note_type": "2", "author": "新疆尼勒克黑蜂蜂蜜", "shop": "新疆尼勒克黑蜂蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "spectrum/1040g34o324gbkchon4105nikfbu087h7gi77aro", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 4}, {"note_id": "6a93d01a000000000402be86", "title": "才8💰！健达你疯了！", "note_type": "1", "author": "不吃大饼", "shop": "GS25便利店的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_pre_post/1040g3k0324eig5l90a305ppuvui73bd8agofjlo", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 5}, {"note_id": "6a9544e7000000000a00987d", "title": "我爸：3R一个！！我妈：3R一个！！我：好嘞！！🥹", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324h4b98ln4405pdngbjift77u0ap5n0", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 6}, {"note_id": "6a94de67000000002503a022", "title": "没抢到的贝贝们，这次真的补上了✌🏻", "note_type": "1", "author": "金帝巧克力", "shop": "金帝巧克力旗舰店", "cat": "休闲零食", "third": "巧克力", "fid": "1040g008324h2cerd7a6g5qgc1lh08v00rh4jc6o", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 7}, {"note_id": "6a96362a000000002800093f", "title": "如何标题才能让大家知道我家碱水才3块🥹", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324h4b98ln4505pdngbjift77mefnu4o", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 8}, {"note_id": "6a93ef67000000001f0026ae", "title": "开始期待今年的中秋节啦🍪🥮🌕", "note_type": "1", "author": "木子烘焙|Muzi cake", "shop": "木子烘焙", "cat": "休闲零食", "third": "低温糕点", "fid": "notes_pre_post/1040g3k0324g4ppn76u0043ubm53us4v8e92dj5g", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "✍️ 图文", "rank": 9}, {"note_id": "6a9a7734000000002b010d24", "title": "这就是你说的神奇巧克力吗", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "note_pre_post_uhdr/1040g3r0324mgon44go2049vnpd7ge26fh5pgrm0", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 10}, {"note_id": "6a969e5a0000000028002255", "title": "感谢姐妹们让我们爆单啦🎉🎉", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g2sg324ii9bnrn2fg5pdngbjift77kavg8eo", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 11}, {"note_id": "6a97df0b000000002b002574", "title": "今天吃的这块巧克力好多软糖…", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "note_pre_post_uhdr/1040g3r0324k03sdpna0049vnpd7ge26fm7clv80", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 12}, {"note_id": "6a9687fc0000000025037ab3", "title": "黄皮叉烧月饼又见面了", "note_type": "2", "author": "无所尉吃什么", "shop": "无所尉吃什么的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g2sg324im6ufina6g48c9iv50dqiupvipg88", "date": "2026-09-01", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 13}, {"note_id": "6a9a7d3300000000120362fb", "title": "你抄袭的速度永远赶不上我姐的创新速度。。", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324mi0pca74005pdngbjift77fp5gv88", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 14}, {"note_id": "6a93c5ee000000002a030b0f", "title": "月饼当晚突破4000单！说点心里话", "note_type": "2", "author": "新疆尼勒克黑蜂蜂蜜", "shop": "新疆尼勒克黑蜂蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "spectrum/1040g0k0324g01vfjgm005nikfbu087h7lq2u3t0", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 15}, {"note_id": "6a957559000000002303ea3f", "title": "今天也是黑提篮茶花礼不够分的一天～", "note_type": "1", "author": "白房子咖啡", "shop": "白房子咖啡的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k8324hkoecd74ag4a7jurmgggu5pu9i84o", "date": "2026-08-31", "plays": ["礼赠场景"], "carrier": "✍️ 图文", "rank": 16}, {"note_id": "6a9be1140000000011030d68", "title": "菠萝干开箱展示", "note_type": "2", "author": "想退休的W", "shop": "己食地的店", "cat": "休闲零食", "third": "蜜饯/枣类/梅/果干/冻干", "fid": "spectrum/1040g34o324ntb1gcn4105o5id8e0bvm0cao71ro", "date": "2026-09-05", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 17}, {"note_id": "6a93ef7a0000000020034e6c", "title": "上架｜分享你的恰巴塔料理～", "note_type": "1", "author": "畄焙", "shop": "畄焙的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k8324g54m94nk705pi1fpu0u3h3994kc1g", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "✍️ 图文", "rank": 18}, {"note_id": "6a984c3300000000290188be", "title": "这个巧克力又刷新了我的认知了", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "note_pre_post_uhdr/1040g3r8324kdeujsga7049vnpd7ge26f4r35sq0", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 19}, {"note_id": "6a990f470000000012034fe5", "title": "🙏再次感谢姐妹们的喜爱，订单飙升1w➕", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g2sg324l0ablkgmeg5pdngbjift77cm2e4go", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 20}, {"note_id": "6a97ee230000000012035632", "title": "姐妹们放心吧💪就算火了我也不会涨价滴！！🔥", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324k2158h720g5pdngbjift77shll8hg", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 21}, {"note_id": "6a9642f3000000002802b382", "title": "买到啦‼️火遍全网的软糖夹心巧克力Haribo", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_uhdr/1040g3qo324idt4qinu7049vnpd7ge26fbbv5bo8", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 22}, {"note_id": "6a96a38d000000002803906f", "title": "一晚上爆卖1.2w块月饼，我赌对了！", "note_type": "2", "author": "新疆尼勒克黑蜂蜂蜜", "shop": "新疆尼勒克黑蜂蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "spectrum/1040g0k0324ipmeppgm005nikfbu087h7qleqfj8", "date": "2026-09-01", "plays": ["新品/节令", "品类爆款"], "carrier": "▶️ 视频", "rank": 23}, {"note_id": "6a9577ef000000002600362f", "title": "陆穗·中秋月「饼」礼盒🌕", "note_type": "1", "author": "陆穗烘焙 Seoi6 Bakehouse", "shop": "陆穗烘焙 Seoi6 Bakehouse的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324hisnfn0m0g43p17ge32iq5ftjq9vo", "date": "2026-08-31", "plays": ["新品/节令", "礼赠场景"], "carrier": "✍️ 图文", "rank": 24}, {"note_id": "6a9579560000000004029e0a", "title": "这是我唯一愿意给孩子吃的饼干👧", "note_type": "1", "author": "贪吃娃儿妈", "shop": "苏农科JAAS的店", "cat": "休闲零食", "third": "饼干/膨化", "fid": "notes_pre_post/1040g3k8324hg5b8d0od05pvjbi9ing3tngtjeg0", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 25}, {"note_id": "6a93a29a000000001e015419", "title": "感谢大家信任！酸口纯凤梨酥3天2000+订单！", "note_type": "1", "author": "Demitin｜半糖铁盒", "shop": "Demitin｜半糖铁盒的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324fra5mqn4405q5ll9jmaqbv5baq540", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 26}, {"note_id": "6a9566af000000002102c645", "title": "米哈游×交大联名礼盒超详细开箱来啦！", "note_type": "2", "author": "交大思源万物", "shop": "交大思源万物的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324hj0lh47k005phgihvgu8tfue98jj8", "date": "2026-08-31", "plays": ["礼赠场景", "IP联名"], "carrier": "▶️ 视频", "rank": 27}, {"note_id": "6a96b596000000002802e5e3", "title": "第一个想到把软糖和巧克力融合的简直是神…", "note_type": "1", "author": "一只liuliu", "shop": "一只liuliu的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_pre_post/1040g3k8324irml5dnacg40ppgjva1tkvcgjvr60", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 28}, {"note_id": "6a9373ad000000001f01fa54", "title": "免$试吃巧克力豆即将下架，想拍尽快手慢无", "note_type": "1", "author": "菓遇可可手工巧克力", "shop": "菓遇可可手工巧克力的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_pre_post/1040g3k8324flui470m5g49vvncudal86f7hmqmg", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 29}, {"note_id": "6a9957cf0000000029018848", "title": "坐大韩头等舱只为这块苹果饼干谁懂", "note_type": "1", "author": "开心菠萝派", "shop": "拉面口袋的店", "cat": "休闲零食", "third": "饼干/膨化", "fid": "1040g2sg324l8ff65gagg5qd675f7793bmtsfpog", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 30}, {"note_id": "6a97c348000000002a007d03", "title": "谁懂啊！！！定价6r…结果不够卖了", "note_type": "1", "author": "妮妮是果脯大王", "shop": "妮妮家果脯的店的店", "cat": "休闲零食", "third": "蜜饯/枣类/梅/果干/冻干", "fid": "1040g008324jsjjr37k005pbkcv7o60ojdef9kmo", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 31}, {"note_id": "6a93ba1a000000002800545c", "title": "【新品开售】牛肝菌爆汁豆腐", "note_type": "2", "author": "庆春朴门", "shop": "庆春朴门的店", "cat": "休闲零食", "third": "豆干制品/蔬菜干", "fid": "spectrum/1040g34o324g9en4e0s104ar8svjtada90dstib8", "date": "2026-08-30", "plays": ["新品/节令", "品类爆款"], "carrier": "▶️ 视频", "rank": 32}, {"note_id": "6a996ff700000000120242fb", "title": "中秋节装一篮子好吃的送朋友～", "note_type": "1", "author": "白房子咖啡", "shop": "白房子咖啡的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k0324lgua0c0m004a7jurmgggu5996looo", "date": "2026-09-03", "plays": ["新品/节令", "礼赠场景"], "carrier": "✍️ 图文", "rank": 33}, {"note_id": "6a94fc73000000002003d913", "title": "被王真儿种草的芝麻威化✨好吃到不想说话", "note_type": "2", "author": "嘴巴很忙ing", "shop": "嘴巴很忙ing的店", "cat": "休闲零食", "third": "饼干/膨化", "fid": "1040g008324hgc481na4g49a3s1j7glf1s8v0cno", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 34}, {"note_id": "6a9a39ed000000002900e891", "title": "今天排排队出发的中秋曲奇全家福们～", "note_type": "1", "author": "白房子咖啡", "shop": "白房子咖啡的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k8324m9mbifgmag4a7jurmgggu5nmccnog", "date": "2026-09-04", "plays": ["新品/节令", "品类爆款"], "carrier": "✍️ 图文", "rank": 35}, {"note_id": "6a9a8dbc000000001203fd85", "title": "再次感谢4w+的喜爱🙏订单飙升", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324mi0pca740g5pdngbjift77usn7ej0", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 36}, {"note_id": "6a942146000000001f002359", "title": "爱吃糖醋口的宝子别错过这款温州排骨🥩", "note_type": "1", "author": "牛农BBQ🍖", "shop": "牛农BBQ🍖的店", "cat": "休闲零食", "third": "肉干/肉脯/卤味零食", "fid": "notes_pre_post/1040g3k8324g4hac7mu205qk7ncfks302hvn46lg", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 37}, {"note_id": "6a95c3c8000000002b0015a2", "title": "巧克力夹软糖…好神奇的搭配", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "note_pre_post_uhdr/1040g3r8324hu89a3nk9g49vnpd7ge26flsafmko", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 38}, {"note_id": "6a97429a000000002902c69c", "title": "东方甄选杏干", "note_type": "2", "author": "东方甄选", "shop": "东方甄选旗舰店", "cat": "休闲零食", "third": "山核桃/坚果/炒货", "fid": "spectrum/1040g0k0324jd3gb50m005nrhh2j0bgl9dtn2fvo", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 39}, {"note_id": "6a97a105000000002901869b", "title": "买到啦❗️火爆全网的哈瑞宝软糖巧克力", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_uhdr/1040g3qg324jokopk0o0049vnpd7ge26f494boi0", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 40}, {"note_id": "6a97cdf20000000012026553", "title": "中秋黑提篮这批售完不补货啦！", "note_type": "1", "author": "白房子咖啡集合店", "shop": "白房子咖啡集合店的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324jtopm4mu4g5oslonn9gou8k8hvae0", "date": "2026-09-02", "plays": ["新品/节令", "礼赠场景"], "carrier": "✍️ 图文", "rank": 41}, {"note_id": "6a978c360000000012024b3a", "title": "秋天来了｜🍁秋日的第一份祝福安排上啦🍪", "note_type": "1", "author": "木子烘焙|Muzi cake", "shop": "木子烘焙", "cat": "休闲零食", "third": "低温糕点", "fid": "notes_pre_post/1040g3k0324jlh4aln40043ubm53us4v85u9cii0", "date": "2026-09-02", "plays": ["新品/节令"], "carrier": "✍️ 图文", "rank": 42}, {"note_id": "6a94f8fa000000000b02716a", "title": "你抄袭的速度跟不上我妈的改良速度😎", "note_type": "1", "author": "Demitin｜半糖铁盒", "shop": "Demitin｜半糖铁盒的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324h5j1ojgs605q5ll9jmaqbvr7m9j2g", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 43}, {"note_id": "6a96aa6e000000002802e637", "title": "椒盐核桃仁我真的会无限回购🥜咸香酥脆！！", "note_type": "2", "author": "塔塔小铺子", "shop": "塔塔小铺子的店", "cat": "休闲零食", "third": "山核桃/坚果/炒货", "fid": "1040g2sg324ike5fbnaf05qg2pc30g500snkgo9g", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 44}, {"note_id": "6a99073b000000002802e431", "title": "大韩航空飞机上的苹果饼干好吃到失语。。", "note_type": "1", "author": "知食分子", "shop": "拉面口袋的店", "cat": "休闲零食", "third": "饼干/膨化", "fid": "1040g008324kt7behnaig5ptrns1jjphi74utnc0", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 45}, {"note_id": "6a940112000000002501399a", "title": "韩要强混合坚果开测！", "note_type": "2", "author": "韩要强现烤坚果", "shop": "韩要强现烤坚果的店", "cat": "休闲零食", "third": "山核桃/坚果/炒货", "fid": "1040g008324g79d7hnu005nfo2etg82c7mh0bd5o", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 46}, {"note_id": "6a9430d5000000001f01ecff", "title": "白脱派真的巨好吃啊啊啊啊啊啊啊！！！", "note_type": "1", "author": "Mikiko", "shop": "Mikiko的店", "cat": "休闲零食", "third": "低温糕点", "fid": "1040g008324gd07mm0m005npt67b0bk9tgdk5kh8", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 47}, {"note_id": "6a9656bb0000000012002bd5", "title": "应大家强烈要求，全家福简装规格上线", "note_type": "1", "author": "Spring的细微生活", "shop": "Spring的细微生活的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k0324ifutfe745048c7cfno9o84hio43a0", "date": "2026-09-01", "plays": ["新品/节令"], "carrier": "✍️ 图文", "rank": 48}, {"note_id": "6a9824d200000000110392b7", "title": "中秋除了月饼还有曲奇什锦盒子呀！", "note_type": "1", "author": "白房子咖啡", "shop": "白房子咖啡的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g008324k8l7h1gm004a7jurmgggu5ribuvfo", "date": "2026-09-02", "plays": ["新品/节令"], "carrier": "✍️ 图文", "rank": 49}, {"note_id": "6a98f137000000001001c72c", "title": "玫瑰糕真的不够卖😭咱下单前考虑清楚哦", "note_type": "2", "author": "小张在阿勒泰卖蜂蜜", "shop": "小张在阿勒泰卖蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g2sg324l1j66n7ue04ajssso9uoun2rfrkuo", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 50}, {"note_id": "6a9a227e000000001203763b", "title": "我爸：3R一个！我妈：那就3R一个发顺丰吧！", "note_type": "1", "author": "山菓BAK", "shop": "山菓BAK的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "1040g2sg324l0ablkgmg05pdngbjift777m5svm8", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 51}, {"note_id": "6a96a661000000002a006b77", "title": "23000人预约的断货王最后一次补货🙌🏻", "note_type": "1", "author": "金帝巧克力", "shop": "金帝巧克力旗舰店", "cat": "休闲零食", "third": "巧克力", "fid": "1040g008324ip4ngpga305qgc1lh08v00kho4feg", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 52}, {"note_id": "6a990373000000002900ce6e", "title": "一晚突破2w颗月饼！我赌赢了！", "note_type": "2", "author": "新疆尼勒克黑蜂蜂蜜", "shop": "新疆尼勒克黑蜂蜂蜜的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "spectrum/1040g34o324l3mds86u105nikfbu087h78th0cfg", "date": "2026-09-03", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 53}, {"note_id": "6a96635b000000002902d935", "title": "世界上最善良的纯手工月饼（本人自封）", "note_type": "1", "author": "半日隅nook咖啡", "shop": "半日隅nook咖啡的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k0324id9avegs405pulgc4jjocgg24ae48", "date": "2026-09-01", "plays": ["新品/节令", "工艺叙事"], "carrier": "✍️ 图文", "rank": 54}, {"note_id": "6a96cefd000000002603317d", "title": "巧克力里好多软糖…HARIBO × 瑞特滋", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "note_pre_post_uhdr/1040g3r0324iuspisgo0049vnpd7ge26f01r8770", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 55}, {"note_id": "6a97da8e0000000028032b38", "title": "芳姐推荐的台湾美食四件套", "note_type": "1", "author": "妮子食尚", "shop": "妮子食尚宝岛美食坊的店", "cat": "休闲零食", "third": "糕点/点心", "fid": "notes_pre_post/1040g3k8324jng690ga005oj82rg40ib5i5cdu50", "date": "2026-09-02", "plays": ["地域特色"], "carrier": "✍️ 图文", "rank": 56}, {"note_id": "6a957dc700000000250268b0", "title": "前500名！这次连袋子都给你们配好了🍃\n", "note_type": "1", "author": "金帝巧克力", "shop": "金帝巧克力旗舰店", "cat": "休闲零食", "third": "巧克力", "fid": "1040g2sg324hlptc00o6g5qgc1lh08v00ahu8jrg", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 57}, {"note_id": "6a965a4e000000000b03638c", "title": "哇‼️梦幻联名！巧克力咬开还有哈瑞宝软糖", "note_type": "1", "author": "一只榛子", "shop": "一只榛子的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_uhdr/1040g3qo324idt4qinu9g49vnpd7ge26fbgqo6m0", "date": "2026-09-01", "plays": ["IP联名"], "carrier": "✍️ 图文", "rank": 58}, {"note_id": "6a93bf2a000000002501cbe0", "title": "上新预告！今晚上新", "note_type": "1", "author": "小谢的核桃", "shop": "小谢的核桃的店", "cat": "休闲零食", "third": "山核桃/坚果/炒货", "fid": "notes_uhdr/1040g3qg324fvabponu0049iciqvsflh6bs1l01o", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 59}, {"note_id": "6a951cbb0000000007006abc", "title": "谁发明的。。。出来挨夸！", "note_type": "1", "author": "不吃大饼", "shop": "GS25便利店的店", "cat": "休闲零食", "third": "巧克力", "fid": "notes_pre_post/1040g3k0324h3ajip7a405plk7oq7cd7bmvop0o8", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 60}], "sauce": [{"note_id": "6a9776fd0000000028029d1a", "title": "这个野苏子酱，我两天吃了一罐‼️", "note_type": "2", "author": "村驴", "shop": "村驴的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g2sg324jjcfcpna0047ckpeieunlt88g90mg", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 1}, {"note_id": "6a94cd89000000002a032f5c", "title": "浓香微辣‼️大人小孩都能吃的简易版油泼面", "note_type": "2", "author": "村驴", "shop": "村驴的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324h09vc4na0047ckpeieunltihtedmg", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 2}, {"note_id": "6a955da000000000030298db", "title": "谢谢姐妹支持✨小瓶尝鲜装辣椒油终于上线啦", "note_type": "1", "author": "咚咚爱吃辣", "shop": "贵州糊辣椒蘸水的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324hf7tauga605ospejua368vsvq5j6o", "date": "2026-08-31", "plays": ["新品/节令", "组合促销"], "carrier": "✍️ 图文", "rank": 3}, {"note_id": "6a94ea0b000000002501c2fd", "title": "掉秤22斤✅！水煮菜续命还得是贵州蘸水🌶️", "note_type": "2", "author": "甜甜圈", "shop": "小萍姐美食日记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324h3nlc7na0g5o2r85909326pod3280", "date": "2026-08-31", "plays": ["地域特色"], "carrier": "▶️ 视频", "rank": 4}, {"note_id": "6a96a4a0000000002b013200", "title": "大蒜味液体奶酪🧄最后一批啦", "note_type": "1", "author": "Cheese More", "shop": "Cheese More的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324ioa7koga8g4btk3raq6jpjshkijjg", "date": "2026-09-01", "plays": ["组合促销"], "carrier": "✍️ 图文", "rank": 5}, {"note_id": "6a9abcbc0000000026016f0b", "title": "临期发酵黄油", "note_type": "1", "author": "北欧食品商行", "shop": "北欧食品商行的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324mpo0n9ga005n833na4n6jlt01onm0", "date": "2026-09-04", "plays": ["工艺叙事"], "carrier": "✍️ 图文", "rank": 6}, {"note_id": "6a9649970000000026031e71", "title": "两眼一睁就是减！水煮菜蘸树番茄辣酱", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324ieelhcnk9g5odi2cv8c5gkk10q01g", "date": "2026-09-01", "plays": ["健康养生"], "carrier": "✍️ 图文", "rank": 7}, {"note_id": "6a95bb3f0000000012036980", "title": "【牛肝菌炖豆腐】全国慶春门店皆可品尝", "note_type": "2", "author": "庆春朴门", "shop": "庆春朴门的店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "1040g008324ht1g2k74004ar8svjtada9p2rmg18", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 8}, {"note_id": "6a9a892300000000110322d7", "title": "均价100+💰的奶酪！除了贵，真的没有毛病", "note_type": "2", "author": "奶酪猴子Cheese Monkey", "shop": "奶酪猴子Cheese Monkey的店", "cat": "粮油调味", "third": "奶酪/乳制品", "fid": "1040g2sg324mjaand7ae05n44us0453raut8hjsg", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 9}, {"note_id": "6a93a76c00000000250246d3", "title": "这口酸辣，云南人吃了都想家", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324f5k42v0o605odi2cv8c5gk710han0", "date": "2026-08-30", "plays": ["地域特色"], "carrier": "✍️ 图文", "rank": 10}, {"note_id": "6a93d97f000000001f0015bf", "title": "孩子连吃7天都不腻开学早餐，培根鸡蛋烧饼", "note_type": "2", "author": "下厨房", "shop": "下厨房旗舰店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "spectrum/1040g34o324g2b4m674805ntnif508armo78umf0", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 11}, {"note_id": "6a97b94b0000000012025a87", "title": "下午冲藕粉羹吃，清润回甘，吃完小肚子暖和", "note_type": "1", "author": "南食召食品", "shop": "南食召食品旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "spectrum/1040g0k0324jrhsvmn4005ohhijv41npsb0mfvv0", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 12}, {"note_id": "6a991f2b00000000270176b9", "title": "1.8r！1.8r！1.8r！重要的说三遍！！", "note_type": "1", "author": "咖皇", "shop": "咖皇旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324l775nk0a005pjh9833cu5c6r4p3s0", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 13}, {"note_id": "6a957b180000000025039a28", "title": "山姆五指毛桃谷物粉特价48.9！", "note_type": "1", "author": "晓甜家的Sam小屋", "shop": "晓甜家的Sam小屋的店", "cat": "粮油调味", "third": "蜜饯果干", "fid": "notes_pre_post/1040g3k0324hl8g0l7a205pi9f8fhos13j93dkj8", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 14}, {"note_id": "6a9a39d9000000000b00dff3", "title": "9月4日山姆坚果乳骨折清仓，配料干净", "note_type": "1", "author": "秋秋SM小店", "shop": "秋秋SM小店的店", "cat": "粮油调味", "third": "狗主粮", "fid": "1040g008324m9nulp7ae05ofp67ooc4e0s7270co", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 15}, {"note_id": "6a980b2e000000002a00661a", "title": "2.3w + 朋友尝鲜的小众香椿腐乳，谢谢大家", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324k5j4v27ks05odi2cv8c5gknqil9g8", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 16}, {"note_id": "6a95266f0000000026003849", "title": "梅酱十周年挤挤瓶，换了新包装，挤着用更方便", "note_type": "1", "author": "南食召食品", "shop": "南食召食品旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324hb2vftn2705ohhijv41nps8btpp2o", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 17}, {"note_id": "6a968194000000002900ea56", "title": "红酸汤是发酵得来的，经过熟制，做汤底不油腻", "note_type": "1", "author": "南食召食品", "shop": "南食召食品旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324ijels80m4g5ohhijv41nps3h06su8", "date": "2026-09-01", "plays": ["工艺叙事"], "carrier": "✍️ 图文", "rank": 18}, {"note_id": "6a9a340f000000002a02df46", "title": "真的没有偷偷减肥，吃的干净真的会瘦！！", "note_type": "1", "author": "辣辣不做饿梦", "shop": "辣椒西施（贵州特产）的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "note_pre_post_uhdr/1040g3r8324lcrofu7ac05q0ek7fjjp0ddcrasco", "date": "2026-09-04", "plays": ["健康养生"], "carrier": "✍️ 图文", "rank": 19}, {"note_id": "6a93e7e9000000002c03fffc", "title": "拌面开一罐慢炸的菌子油，鲜香有嚼劲", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324g44o5h0o705odi2cv8c5gkri1vmo8", "date": "2026-08-30", "plays": ["工艺叙事"], "carrier": "✍️ 图文", "rank": 20}, {"note_id": "6a968f98000000002902edb4", "title": "四五百的正荣开心果酱，还在盲目入吗？", "note_type": "1", "author": "喜悦酱JoyfulNut", "shop": "喜悦酱JoyfulNut的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "spectrum/1040g34o324in56l1gs4g4b7bf1usmv0rjunessg", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 21}, {"note_id": "6a9a7fa3000000002902e3c9", "title": "学做巴德维酸奶碗🥣 简单代餐高营养密度", "note_type": "2", "author": "胡子叔的餐盘", "shop": "胡子叔的餐盘的店", "cat": "粮油调味", "third": "山核桃/坚果/炒货", "fid": "110/0/01ea9a7db77571a4001000000001a06b7b26ef_0.jpg", "date": "2026-09-04", "plays": ["健康养生"], "carrier": "▶️ 视频", "rank": 22}, {"note_id": "6a939c44000000002a0311a0", "title": "山姆泰式奶茶翡翠沙终于降价了！", "note_type": "1", "author": "山姆好物推荐官", "shop": "小芒山姆优选的店", "cat": "粮油调味", "third": "饮料", "fid": "notes_pre_post/1040g3k8324fqtfnvnkd05oqq8vm65c2ha3vclt0", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 23}, {"note_id": "6a98e9f200000000280333dd", "title": "管理期！离不开这罐树番茄辣酱", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324l0jsh7nu705odi2cv8c5gkemd0v7o", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 24}, {"note_id": "6a9501ae000000002501b158", "title": "太方便了！！1x💰终于不怕番茄罐头坏掉了", "note_type": "1", "author": "下厨房", "shop": "下厨房旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324h60e3c7a705ntnif508armlde2qq0", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 25}, {"note_id": "6a96aeb7000000002900d301", "title": "【芝麻盐西兰苔】", "note_type": "2", "author": "庆春朴门", "shop": "庆春朴门的店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "1040g2sg324ir0fdngse04ar8svjtada90ii95tg", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 26}, {"note_id": "6a940cb1000000001803ed9d", "title": "🎐冰皮月饼最适配的万能乳酪馅‼️超美味", "note_type": "2", "author": "焙小姐", "shop": "焙小姐旗舰店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "110/0/01ea940bb06efd28001000000001a0524db408_0.jpg", "date": "2026-08-30", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 27}, {"note_id": "6a99820e0000000026016813", "title": "在上海亚太素食展大家不停回购的紫苏籽油", "note_type": "2", "author": "全食物日记Diary", "shop": "全食物日记旗舰店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "1040g008324kc4ni9nu0g5pnjnfdne4stue0dsj0", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 28}, {"note_id": "6a97e88b000000002b0100d6", "title": "无油！干净！傣味特色火烧树番茄辣椒酱", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324jtk1ibna7g5odi2cv8c5gk8fr210o", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 29}, {"note_id": "6a9a38e7000000002b001dde", "title": "有这瓶灵魂树番茄喃咪，不用出去吃云南菜了", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324lk2jur7a505odi2cv8c5gkakrd7ug", "date": "2026-09-04", "plays": ["地域特色"], "carrier": "✍️ 图文", "rank": 30}, {"note_id": "6a956db8000000000303efde", "title": "香辣咸香的小众香椿腐乳，实在太下饭了", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324hgrtif7a205odi2cv8c5gkgj388pg", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 31}, {"note_id": "6a96dcaa000000002a025202", "title": "在整个下饭酱界这也是小众好吃的一罐", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k0324j0in357u005odi2cv8c5gk3kp5c4g", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 32}, {"note_id": "6a9799d80000000026031615", "title": "听取大家建议！奶奶辣椒油小瓶尝鲜装来咯🎉", "note_type": "1", "author": "咚咚爱吃辣", "shop": "贵州糊辣椒蘸水的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324jnkfhq0o005qhtq55jvc00rtkqss0", "date": "2026-09-02", "plays": ["组合促销"], "carrier": "✍️ 图文", "rank": 33}, {"note_id": "6a9a669d000000002900f5d8", "title": "无盐款吃过？La Conviette咸味糖果黄油来啦", "note_type": "1", "author": "city'super", "shop": "city'super的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g2sg324o774jpgsjg5q1mdh76r9ap6jcvb90", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 34}, {"note_id": "6a98274900000000260200cf", "title": "懒妈必囤的小学生早餐，开学上新拍3发4", "note_type": "2", "author": "下厨房", "shop": "下厨房旗舰店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "spectrum/1040g0k0324k90blen4105ntnif508arm3ffujrg", "date": "2026-09-02", "plays": ["新品/节令", "组合促销"], "carrier": "▶️ 视频", "rank": 35}, {"note_id": "6a93f2790000000024006bd9", "title": "", "note_type": "2", "author": "大厨神餐饮调料", "shop": "大厨神餐饮调料的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324g5i3qa72605p13r6ak3h70dni1v9g", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 36}, {"note_id": "6a9b820f0000000012036d9d", "title": "【咖喱鲜蔬】", "note_type": "2", "author": "庆春朴门", "shop": "庆春朴门的店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "spectrum/1040g34o324nhp7lahg104ar8svjtada91sds6gg", "date": "2026-09-05", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 37}, {"note_id": "6a9416390000000025019030", "title": "好吃！别买错！蘸水还是这种的方便过瘾！", "note_type": "2", "author": "你很特别", "shop": "球球很可爱的店", "cat": "粮油调味", "third": "UNKNOWN", "fid": "1040g008324fntvr5nu0g5q9vpq4dp892vqbj0c0", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 38}, {"note_id": "6a9693f9000000001001e1d0", "title": "不愧是阿雅！嘴巴一整天都是清新的体验！！", "note_type": "2", "author": "Amanda", "shop": "COCO&VOVO旗舰店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "spectrum/1040g34o324inm13n720g5ptk8ic3925bf8aob80", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 39}, {"note_id": "6a974274000000000b0031b2", "title": "东方甄选老抽酱油", "note_type": "2", "author": "东方甄选", "shop": "东方甄选旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "spectrum/1040g0k0324jd2uuh74005nrhh2j0bgl9ql0c8hg", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 40}, {"note_id": "6a93032f0000000026007f3d", "title": "真实返图🔥第三代黑芝麻馅好评真的看麻了", "note_type": "1", "author": "宁波索菲食品有限公司", "shop": "宁波索菲食品有限公司的店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "ark_notes/104104eo324f85ptk0o069jh5rhi00000000001ciutvlc", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 41}, {"note_id": "6a96cee6000000002502c9fc", "title": "连吃7天不腻的小学生早餐！早餐神器必囤", "note_type": "2", "author": "下厨房", "shop": "下厨房旗舰店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "spectrum/1040g34o324iuvgf4n20g5ntnif508armp6t8c10", "date": "2026-09-01", "plays": ["组合促销"], "carrier": "▶️ 视频", "rank": 42}, {"note_id": "6a96a790000000002a006f10", "title": "能走进万千家庭餐桌的无油咖喱是什么样的？", "note_type": "1", "author": "咖皇", "shop": "咖皇旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_uhdr/1040g3qo324iojfmi7k3g5pjh9833cu5c1e63lg8", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 43}, {"note_id": "6a954c71000000002600124d", "title": "XXXL→M码❗️靠水煮菜+灵魂蘸料掉28斤‼️", "note_type": "2", "author": "无辣不欢小仙女", "shop": "二胖的妈妈的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324hajjcjgm105prvhiei2pk9hbgba5g", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 44}, {"note_id": "6a9ab3d2000000001103b645", "title": "", "note_type": "2", "author": "贝贝吃不饱", "shop": "贝贝吃不饱的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g2sg324mokkm7n2e05odbgjuoded28e193p0", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 45}, {"note_id": "6a956a9a0000000020030fc5", "title": "买了杏仁粉别瞎喝！方法错了等于白费", "note_type": "2", "author": "念安的美食记", "shop": "念安的美食记的店", "cat": "粮油调味", "third": "蜜饯/枣类/梅/果干/冻干", "fid": "1040g008324hj72dpgol043h9edr5hkn5vnj8kgg", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 46}, {"note_id": "6a94eae9000000000b027e34", "title": "看完之后，你还敢吃紫苏籽油吗？", "note_type": "2", "author": "紫苏油日常分享", "shop": "昭儒商贸的店", "cat": "粮油调味", "third": "食用油/调味油", "fid": "spectrum/1040g0k0324h3ta43mu005qfdrv20g707mjp298o", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 47}, {"note_id": "6a9a7619000000002601e99b", "title": "秋季汤底料正式和大家见面啦", "note_type": "2", "author": "莫氏鸡煲", "shop": "莫氏鸡煲的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "spectrum/1040g34o324mh3anr740g5qf4g00gg9000r7dvv8", "date": "2026-09-04", "plays": ["新品/节令"], "carrier": "▶️ 视频", "rank": 48}, {"note_id": "6a9552640000000026035b05", "title": "爷爷说:天冷是吃三鲜酱最好的时机!!", "note_type": "2", "author": "加点酱就好", "shop": "小鱼酱精选的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324hg28g46u005qib96qjv402b176hlo", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 49}, {"note_id": "6a9946130000000026014d10", "title": "法国顶流黄油Échiré竟然藏在村子里", "note_type": "1", "author": "奶酪猴子Cheese Monkey", "shop": "奶酪猴子Cheese Monkey的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324lbih9hga0g5n44us0453raihbisk8", "date": "2026-09-03", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 50}, {"note_id": "6a997d28000000002802e56e", "title": "宝妈们真的要知道老祖宗留给孩子们的糖！", "note_type": "2", "author": "熬麦芽糖的菜菜羊", "shop": "熬麦芽糖的菜菜羊的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "spectrum/1040g34o324likak66u105nc0qv6g93n61c2ldig", "date": "2026-09-04", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 51}, {"note_id": "6a96251b000000000b0024a9", "title": "160/112斤，不胖，全靠吃水煮菜掉⬇️来的", "note_type": "1", "author": "辣辣不做饿梦", "shop": "辣椒西施（贵州特产）的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g008324i9l4e4go005q0ek7fjjp0djcjapc0", "date": "2026-09-01", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 52}, {"note_id": "6a976b2f0000000028033eff", "title": "", "note_type": "2", "author": "朵家美食", "shop": "朵家美食的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g2sg324ji17tt0oe05oiat0pk16s5dtfjq3g", "date": "2026-09-02", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 53}, {"note_id": "6a955dc100000000260346bf", "title": "控糖之后才知道  饮食稳定多轻松", "note_type": "1", "author": "体飞适", "shop": "体飞适旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324hht6qv74005noinitg8vcfsbgc23g", "date": "2026-08-31", "plays": ["健康养生"], "carrier": "✍️ 图文", "rank": 54}, {"note_id": "6a9c124b000000000b00f959", "title": "连吃五天没腻！这罐外婆菜治好了我的没胃口", "note_type": "1", "author": "撷食记", "shop": "撷食记的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324nuiiog7acg5odi2cv8c5gkdm9uk6g", "date": "2026-09-05", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 55}, {"note_id": "6a81b20500000000250042ea", "title": "慢熬鲜果凤梨馅，一口尝到自然果香", "note_type": "2", "author": "福爱缇", "shop": "福爱缇的店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "1040g008323tumcdt7a4g5nuprbmg80mope48eno", "date": "2026-08-30", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 56}, {"note_id": "6a954d0600000000240075eb", "title": "最适合中国胃的白人饭，西西里意面酸辣过瘾", "note_type": "2", "author": "原豆复兴Peasup", "shop": "原豆复兴Peasup旗舰店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "1040g2sg324hf91r46uj0449v9satc4frrkipod8", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "▶️ 视频", "rank": 57}, {"note_id": "6a9570c30000000020033559", "title": "吃少油辣椒的人嘴也太严了！", "note_type": "1", "author": "鱼小丝 Little Yusi", "shop": "鱼小丝 Little Yusi的店", "cat": "粮油调味", "third": "调味品/果酱/沙拉", "fid": "notes_pre_post/1040g3k8324gd5mngnuhg5omqkbo0vuhu4shcksg", "date": "2026-08-31", "plays": ["品类爆款"], "carrier": "✍️ 图文", "rank": 58}, {"note_id": "6a998df9000000002700b256", "title": "✅私房必囤‼️古法凤梨馅｜常年热销零差评", "note_type": "1", "author": "宁波索菲食品有限公司", "shop": "宁波索菲食品有限公司的店", "cat": "粮油调味", "third": "烘焙原料/辅料/半成品/食品添加剂", "fid": "ark_notes/104104eo324lkpchrnk069jh5rhi00000000001ahc42go", "date": "2026-09-03", "plays": ["组合促销", "工艺叙事"], "carrier": "✍️ 图文", "rank": 59}, {"note_id": "6a9625a4000000002b01ed6a", "title": "欧洲白领都在喝的假咖啡？0咖啡因高蛋白！", "note_type": "1", "author": "WAN MO", "shop": "WAN MO海外专营店", "cat": "粮油调味", "third": "其他", "fid": "ark_notes/104104eo324iaa6fd7k06kfhdk8jpo0000000006i4s19u", "date": "2026-09-01", "plays": ["健康养生"], "carrier": "✍️ 图文", "rank": 60}]};
+const TAGS = {"snack": ["中秋礼盒季提速", "巧克力尝鲜装领跑", "手作糕点持续上榜"], "sauce": ["自家辣酱/菌油产地叙事", "减脂蘸水场景起量", "烘焙原料小众切入"]};
+const INSIGHTS = {"snack": "本周上榜集中在 糕点/点心（28 席）、巧克力（16 席）、饼干/膨化（4 席）；打法上以 品类爆款、新品/节令、礼赠场景 为主。 另有 6 个店铺一周内多篇上榜，属于持续输出型，可重点参考它们的更新节奏与选题密度。", "sauce": "本周上榜集中在 调味品/果酱/沙拉（39 席）、烘焙原料/辅料/半成品/食品添加剂（7 席）、食用油/调味油（6 席）；打法上以 品类爆款、组合促销、新品/节令 为主。 另有 4 个店铺一周内多篇上榜，属于持续输出型，可重点参考它们的更新节奏与选题密度。"};
+
+function imgUrl(fid, w=540){
+  if(!fid) return '';
+  return 'https://sns-na-i1.xhscdn.com/' + fid + '?imageView2/2/w/' + w + '/format/webp';
+}
+function coverFail(img){
+  img.onerror = null;
+  var d = document.createElement('div');
+  d.className = 'cover-fallback';
+  d.textContent = '封面已失效';
+  if (img.parentNode) img.parentNode.replaceChild(d, img);
+}
+function noteUrl(id){ return 'https://www.xiaohongshu.com/explore/' + id; }
+function rankCls(n){ return n===1?'rank-gold':(n===2?'rank-silver':(n===3?'rank-bronze':'')); }
+
+function cardHtml(n){
+  var pills = (n.plays||[]).map(function(p){ return '<span class="factor-pill">'+p+'</span>'; }).join('');
+  return '<a href="'+noteUrl(n.note_id)+'" target="_blank" rel="noopener" class="note-card">' +
+    '<div style="position:relative;">' +
+      '<img class="note-cover" loading="lazy" src="'+imgUrl(n.fid)+'" alt="" onerror="coverFail(this)">' +
+      '<div class="card-rank '+rankCls(n.rank)+'">'+n.rank+'</div>' +
+    '</div>' +
+    '<div class="note-body">' +
+      '<div class="note-title">'+(n.title||'').replace(/</g,'&lt;')+'</div>' +
+      '<div class="card-shop">'+(n.shop||('@'+(n.author||'')))+'</div>' +
+      '<div class="card-factors">'+pills+'<span class="carrier-badge">'+n.carrier+'</span></div>' +
+      '<div class="note-stat">📅 '+n.date+'</div>' +
+    '</div></a>';
+}
+
+var root = document.getElementById('sections');
+GROUPS.forEach(function(g){
+  var list = DATA[g.key] || [];
+  if(!list.length) return;
+  var sec = document.createElement('section');
+  sec.className = 'cat-section';
+  sec.dataset.key = g.key;
+  var chips = (TAGS[g.key]||[]).map(function(t){ return '<span class="cat-tag-chip">'+t+'</span>'; }).join('');
+  sec.innerHTML =
+    '<div class="cat-head"><h2>'+g.icon+' '+g.name+' TOP'+list.length+'</h2>' +
+      '<span class="cat-sub">'+g.desc+'</span></div>' +
+    '<div class="cat-tags">'+chips+'</div>' +
+    '<div class="cat-insight"><b>🔍 '+g.name+' · 当周洞察：</b>'+(INSIGHTS[g.key]||'')+'</div>' +
+    '<div class="note-grid">'+list.map(cardHtml).join('')+'</div>';
+  root.appendChild(sec);
+});
+
+// ---- sticky tabs ----
+var total = GROUPS.reduce(function(a,g){ return a + (DATA[g.key]||[]).length; }, 0);
+var TABS = [{key:'all', label:'🍂 全部', n: total}].concat(
+  GROUPS.filter(function(g){ return (DATA[g.key]||[]).length; })
+        .map(function(g){ return {key:g.key, label:g.icon+' '+g.name, n:(DATA[g.key]||[]).length}; })
+);
+var bar = document.getElementById('tabbar');
+TABS.forEach(function(t, idx){
+  var b = document.createElement('button');
+  b.className = 'tab-btn' + (idx===0 ? ' on' : '');
+  b.textContent = t.label + ' (' + t.n + ')';
+  b.onclick = function(){
+    [].forEach.call(bar.children, function(c){ c.classList.remove('on'); });
+    b.classList.add('on');
+    [].forEach.call(document.querySelectorAll('.cat-section'), function(sec){
+      sec.classList.toggle('hide', !(t.key==='all' || sec.dataset.key===t.key));
+    });
+    window.scrollTo({top:0, behavior:'smooth'});
+  };
+  bar.appendChild(b);
+});
+
+</script>
+</body>
+</html>
